@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>	
+		<TargetFramework>net7.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<IncludeSymbols>true</IncludeSymbols>
+		
+		<Summary>Small library for evaluationg linq expression trees into values.</Summary>
+
+		<PackageLicenseExpression>MPL-2.0</PackageLicenseExpression>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<RepositoryUrl>https://github.com/StringEpsilon/EpsilonEvaluator</RepositoryUrl>
+		<RespositoryType>git</RespositoryType>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="..\LICENSE.md" Pack="true" PackagePath="/"/>
+	</ItemGroup>
+</Project>
