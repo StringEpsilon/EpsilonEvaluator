@@ -35,12 +35,43 @@ public static class ExpressionEvaluator {
 	}
 
 	public static object? Evaluate(Expression expression) {
-		return expression switch {
-			ConstantExpression => EvaluateConst(expression),
-			BinaryExpression binaryExpression => BinaryExpressionEvaluator.Evaluate(binaryExpression),
-			UnaryExpression unaryExpression => UnaryExpressionEvaluator.Evaluate(unaryExpression),
-			MemberExpression memberExpression => EvaluateMemberExpression(memberExpression),
-			MethodCallExpression callExpression => EvaluateCall(callExpression),
+		return expression.NodeType switch {
+			// Binary expressions:
+			ExpressionType.Constant => EvaluateConst((ConstantExpression)expression),
+
+			ExpressionType.Equal => BinaryEvaluator.Equal((BinaryExpression)expression),
+			ExpressionType.NotEqual => !BinaryEvaluator.Equal((BinaryExpression)expression),
+			ExpressionType.GreaterThanOrEqual => BinaryEvaluator.GreaterThanOrEqual((BinaryExpression)expression),
+			ExpressionType.GreaterThan => BinaryEvaluator.GreaterThan((BinaryExpression)expression),
+			ExpressionType.LessThan => BinaryEvaluator.LessThan((BinaryExpression)expression),
+			ExpressionType.LessThanOrEqual => BinaryEvaluator.LessThanOrEqual((BinaryExpression)expression),
+
+			ExpressionType.Add => BinaryEvaluator.Add((BinaryExpression)expression),
+			ExpressionType.Divide => BinaryEvaluator.Divide((BinaryExpression)expression),
+			ExpressionType.Multiply => BinaryEvaluator.Multiply((BinaryExpression)expression),
+			ExpressionType.Power => BinaryEvaluator.Power((BinaryExpression)expression),
+			ExpressionType.Subtract => BinaryEvaluator.Subtract((BinaryExpression)expression),
+
+			ExpressionType.And => BinaryEvaluator.And((BinaryExpression)expression),
+			ExpressionType.Or => BinaryEvaluator.Or((BinaryExpression)expression),
+			ExpressionType.ExclusiveOr => BinaryEvaluator.ExclusiveOr((BinaryExpression)expression),
+
+			ExpressionType.Coalesce => BinaryEvaluator.Coalesce((BinaryExpression)expression),
+
+			//Unary expressions:
+			ExpressionType.ArrayLength => UnaryEvaluator.ArrayLength((UnaryExpression)expression),
+			ExpressionType.Convert => UnaryEvaluator.Convert((UnaryExpression)expression),
+			ExpressionType.Not => UnaryEvaluator.Not((UnaryExpression)expression),
+			ExpressionType.Negate => UnaryEvaluator.Negate((UnaryExpression)expression),
+			ExpressionType.Quote => UnaryEvaluator.Quote((UnaryExpression)expression),
+			ExpressionType.TypeAs => UnaryEvaluator.TypeAs((UnaryExpression)expression),
+			ExpressionType.UnaryPlus => UnaryEvaluator.UnaryPlus((UnaryExpression)expression),
+
+			// Members:
+			ExpressionType.MemberAccess => EvaluateMemberExpression((MemberExpression)expression),
+
+			// Other:
+			ExpressionType.Call => EvaluateCall((MethodCallExpression)expression),
 			_ => CompileAndRun(expression),
 		};
 	}

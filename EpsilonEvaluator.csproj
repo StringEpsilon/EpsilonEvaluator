@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>	
-		<Version>0.1.0</Version>
+		<Version>0.2.0</Version>
 		<TargetFramework>net7.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<IncludeSymbols>true</IncludeSymbols>
@@ -11,8 +11,10 @@
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<RepositoryUrl>https://github.com/StringEpsilon/EpsilonEvaluator</RepositoryUrl>
 		<RespositoryType>git</RespositoryType>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Include=".\LICENSE.md" Pack="true" PackagePath="/"/>
+		<None Include=".\README.md" Pack="true" PackagePath="/"/>
 	</ItemGroup>
 </Project>

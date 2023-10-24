@@ -10,23 +10,13 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 
-internal static class UnaryExpressionEvaluator {
-	// TODO: Properly evaluate Expression.IsLifted and IsLiftedToNull.
+internal static class UnaryEvaluator {
+	internal static object? Negate(UnaryExpression expression) => ExpressionEvaluator.CompileAndRun(expression);
+	internal static object? Quote(UnaryExpression expression) => ExpressionEvaluator.CompileAndRun(expression);
+	internal static object? TypeAs(UnaryExpression expression) => ExpressionEvaluator.CompileAndRun(expression);
+	internal static object? UnaryPlus(UnaryExpression expression) => ExpressionEvaluator.CompileAndRun(expression);
 
-	internal static object? Evaluate(UnaryExpression expression) {
-		return expression.NodeType switch {
-			ExpressionType.ArrayLength => EvaluateArrayLength(expression),
-			ExpressionType.Convert => EvaluateConvert(expression),
-			ExpressionType.Not => EvaluateNot(expression),
-			ExpressionType.Negate => ExpressionEvaluator.CompileAndRun(expression), // todo
-			ExpressionType.Quote => ExpressionEvaluator.CompileAndRun(expression), // todo
-			ExpressionType.TypeAs => ExpressionEvaluator.CompileAndRun(expression), // todo
-			ExpressionType.UnaryPlus => ExpressionEvaluator.CompileAndRun(expression), // todo
-			_ => ExpressionEvaluator.CompileAndRun(expression)
-		};
-	}
-
-	private static object? EvaluateArrayLength(UnaryExpression expression) {
+	internal static object? ArrayLength(UnaryExpression expression) {
 		var operandValue = ExpressionEvaluator.Evaluate(expression.Operand);
 		if (operandValue is Array array) {
 			return array.Length;
@@ -34,7 +24,7 @@ internal static class UnaryExpressionEvaluator {
 		return ExpressionEvaluator.CompileAndRun(expression);
 	}
 
-	private static object? EvaluateConvert(UnaryExpression expression) {
+	internal static object? Convert(UnaryExpression expression) {
 		var operandValue = ExpressionEvaluator.Evaluate(expression.Operand);
 		if (expression.IsLifted) {
 			if (expression.IsLiftedToNull) {
@@ -44,17 +34,17 @@ internal static class UnaryExpressionEvaluator {
 			}
 			var targetType = expression.Type.GenericTypeArguments.FirstOrDefault();
 			if (targetType != null) {
-				return Convert.ChangeType(operandValue, targetType);
+				return System.Convert.ChangeType(operandValue, targetType);
 			} else {
 				// Bail because IDK what to do if we don't have a generic argument on what should be Nullable<T>:
 				return ExpressionEvaluator.CompileAndRun(expression);
 			}
 		} else {
-			return Convert.ChangeType(operandValue, expression.Type);
+			return System.Convert.ChangeType(operandValue, expression.Type);
 		}
 	}
 
-	private static object? EvaluateNot(UnaryExpression expression) {
+	internal static object? Not(UnaryExpression expression) {
 		var operandValue = ExpressionEvaluator.Evaluate(expression.Operand);
 		if (expression.IsLifted) {
 			if (expression.IsLiftedToNull) {

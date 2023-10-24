@@ -9,32 +9,20 @@ namespace EpsilonEvaluator;
 using System;
 using System.Linq.Expressions;
 
-internal static class BinaryExpressionEvaluator {
-	internal static object? Evaluate(BinaryExpression expression) {
-		return expression.NodeType switch {
-			ExpressionType.Equal => Equal(expression),
-			ExpressionType.NotEqual => !Equal(expression),
-			ExpressionType.GreaterThanOrEqual => GreaterThanOrEqual(expression),
-			ExpressionType.GreaterThan => GreaterThan(expression),
-			ExpressionType.LessThan => LessThan(expression),
-			ExpressionType.LessThanOrEqual => LessThanOrEqual(expression),
+internal static class BinaryEvaluator {
+	internal static object? Add(BinaryExpression expression) => ExpressionEvaluator.CompileAndRun(expression);
+	internal static object? Divide(BinaryExpression expression) => ExpressionEvaluator.CompileAndRun(expression);
+	internal static object? Multiply(BinaryExpression expression) => ExpressionEvaluator.CompileAndRun(expression);
+	internal static object? Power(BinaryExpression expression) => ExpressionEvaluator.CompileAndRun(expression);
+	internal static object? Subtract(BinaryExpression expression) => ExpressionEvaluator.CompileAndRun(expression);
 
-			ExpressionType.Add => ExpressionEvaluator.CompileAndRun(expression), // todo.
-			ExpressionType.Divide => ExpressionEvaluator.CompileAndRun(expression), // todo
-			ExpressionType.Multiply => ExpressionEvaluator.CompileAndRun(expression), // todo
-			ExpressionType.Power => ExpressionEvaluator.CompileAndRun(expression), // todo
-			ExpressionType.Subtract => ExpressionEvaluator.CompileAndRun(expression), // todo
+	internal static object? And(BinaryExpression expression) => ExpressionEvaluator.CompileAndRun(expression);
+	internal static object? Or(BinaryExpression expression) => ExpressionEvaluator.CompileAndRun(expression);
+	internal static object? ExclusiveOr(BinaryExpression expression) => ExpressionEvaluator.CompileAndRun(expression);
 
-			ExpressionType.And => ExpressionEvaluator.CompileAndRun(expression), // todo
-			ExpressionType.Or => ExpressionEvaluator.CompileAndRun(expression), // todo
-			ExpressionType.ExclusiveOr => ExpressionEvaluator.CompileAndRun(expression), // todo.
+	internal static object? Coalesce(BinaryExpression expression) => ExpressionEvaluator.CompileAndRun(expression);
 
-			ExpressionType.Coalesce => ExpressionEvaluator.CompileAndRun(expression), // todo.
-			_ => ExpressionEvaluator.CompileAndRun(expression)
-		};
-	}
-
-	private static bool Equal(BinaryExpression expression) {
+	internal static bool Equal(BinaryExpression expression) {
 		object? left = ExpressionEvaluator.Evaluate(expression.Left);
 		object? right = ExpressionEvaluator.Evaluate(expression.Right);
 		if (left == null || right == null) {
@@ -43,7 +31,7 @@ internal static class BinaryExpressionEvaluator {
 		return left.Equals(right);
 	}
 
-	private static object? GreaterThan(BinaryExpression expression) {
+	internal static object? GreaterThan(BinaryExpression expression) {
 		object? left = ExpressionEvaluator.Evaluate(expression.Left);
 		object? right = ExpressionEvaluator.Evaluate(expression.Right);
 		var leftType = left?.GetType();
@@ -62,7 +50,7 @@ internal static class BinaryExpressionEvaluator {
 		return ExpressionEvaluator.CompileAndRun(expression);
 	}
 
-	private static object? LessThan(BinaryExpression expression) {
+	internal static object? LessThan(BinaryExpression expression) {
 		object? left = ExpressionEvaluator.Evaluate(expression.Left);
 		object? right = ExpressionEvaluator.Evaluate(expression.Right);
 		var leftType = left?.GetType();
@@ -81,7 +69,7 @@ internal static class BinaryExpressionEvaluator {
 		return ExpressionEvaluator.CompileAndRun(expression);
 	}
 
-	private static object? GreaterThanOrEqual(BinaryExpression expression) {
+	internal static object? GreaterThanOrEqual(BinaryExpression expression) {
 		object? left = ExpressionEvaluator.Evaluate(expression.Left);
 		object? right = ExpressionEvaluator.Evaluate(expression.Right);
 		var leftType = left?.GetType();
@@ -100,7 +88,7 @@ internal static class BinaryExpressionEvaluator {
 		return ExpressionEvaluator.CompileAndRun(expression);
 	}
 
-	private static object? LessThanOrEqual(BinaryExpression expression) {
+	internal static object? LessThanOrEqual(BinaryExpression expression) {
 		object? left = ExpressionEvaluator.Evaluate(expression.Left);
 		object? right = ExpressionEvaluator.Evaluate(expression.Right);
 		var leftType = left?.GetType();
