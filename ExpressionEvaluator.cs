@@ -68,12 +68,25 @@ public static class ExpressionEvaluator {
 			ExpressionType.UnaryPlus => UnaryEvaluator.UnaryPlus((UnaryExpression)expression),
 
 			// Members:
+			ExpressionType.Conditional => Conditional((ConditionalExpression)expression),
 			ExpressionType.MemberAccess => EvaluateMemberExpression((MemberExpression)expression),
 
 			// Other:
 			ExpressionType.Call => EvaluateCall((MethodCallExpression)expression),
+			ExpressionType.Lambda => Lambda((LambdaExpression)expression),
 			_ => CompileAndRun(expression),
 		};
+	}
+
+	private static object? Lambda(LambdaExpression expression) {
+		return Evaluate(expression.Body);
+	}
+
+	private static object? Conditional(ConditionalExpression expression) {
+		if ((bool?)Evaluate(expression.Test) == true) {
+			return Evaluate(expression.IfTrue);
+		}
+		return Evaluate(expression.IfTrue);
 	}
 
 	private static object? EvaluateCall(MethodCallExpression callExpression) {
