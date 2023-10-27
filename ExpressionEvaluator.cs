@@ -107,14 +107,20 @@ public static class ExpressionEvaluator {
 		}
 	}
 
-	private static object? EvaluateConst(Expression expression) {
-		if (expression is ConstantExpression constExpression) {
-			return constExpression.Value;
-		}
-		return null;
+	private static object? EvaluateConst(ConstantExpression expression) {
+		return expression.Value;
 	}
 
 	private static object? EvaluateMemberExpression(MemberExpression memberExpression) {
+		if (memberExpression.Expression?.NodeType == ExpressionType.Constant) {
+			if (memberExpression.Member is FieldInfo fieldInfo) {
+				return fieldInfo.GetValue(EvaluateConst((ConstantExpression)memberExpression.Expression));
+			}
+			if (memberExpression.Member is PropertyInfo propInfo) {
+				return propInfo.GetValue(EvaluateConst((ConstantExpression)memberExpression.Expression));
+			}
+		}
+
 		var memberStack = new List<MemberExpression>();
 		Expression? currentExpression = memberExpression;
 		while (currentExpression is MemberExpression currentMember) {
