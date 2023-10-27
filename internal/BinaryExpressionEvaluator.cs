@@ -40,7 +40,34 @@ internal static class BinaryEvaluator {
 	}
 
 	internal static object? Divide(BinaryExpression expression) => ExpressionEvaluator.CompileAndRun(expression);
-	internal static object? Multiply(BinaryExpression expression) => ExpressionEvaluator.CompileAndRun(expression);
+	internal static object? Multiply(BinaryExpression expression) {
+		if (expression.IsLifted && expression.IsLiftedToNull) {
+			return null;
+		}
+		object? left = ExpressionEvaluator.Evaluate(expression.Left);
+		object? right = ExpressionEvaluator.Evaluate(expression.Right);
+		if (left is string || right is string) {
+			return ExpressionEvaluator.CompileAndRun(expression);
+		}
+		if (left != null && right != null) {
+			return left switch {
+				double => (double)left * (double)right,
+				long => (long)left * (long)right,
+				ulong => (ulong)left * (ulong)right,
+				int => (int)left * (int)right,
+				uint => (uint)left * (uint)right,
+				short => (short)left * (short)right,
+				ushort => (ushort)left * (ushort)right,
+				sbyte => (sbyte)left * (sbyte)right,
+				byte => (byte)left * (byte)right,
+				nint => (nint)left * (nint)right,
+				nuint => (nuint)left * (nuint)right,
+				_ => ExpressionEvaluator.CompileAndRun(expression),
+			};
+		}
+		return ExpressionEvaluator.CompileAndRun(expression);
+	}
+
 	internal static object? Power(BinaryExpression expression) => ExpressionEvaluator.CompileAndRun(expression);
 	internal static object? Subtract(BinaryExpression expression) => ExpressionEvaluator.CompileAndRun(expression);
 
