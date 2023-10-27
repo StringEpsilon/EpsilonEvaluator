@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.0 (Future)
+## 0.3.0 (Current)
 
 ### Added
 
@@ -17,7 +17,7 @@ Direct evaluation for:
 	example: `let i; ExpressionEvaluator.Evaluate(() => i);`
 - Removed duplicate type check in constant expression evaluation.
 
-## 0.2.0 (Current)
+## 0.2.0
 
 Restructured the evaluation internals to have a little less indirection.
 
