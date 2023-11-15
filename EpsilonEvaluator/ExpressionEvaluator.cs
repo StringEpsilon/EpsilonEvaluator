@@ -14,24 +14,25 @@ using System.Reflection;
 
 public static class ExpressionEvaluator {
 	public static Dictionary<string, object?>? EvaluateParameters<T>(
-		Expression<Action<T>> expression,
-		bool alwaysCompile = false) {
+		Expression<Action<T>> expression
+	) {
 		if (expression.Body is not MethodCallExpression methodExpression) {
 			throw new InvalidOperationException(
 				$"Can not evaluate parameters from expression of type {expression.GetType().FullName}"
 			);
 		}
-
-		var parameters = methodExpression.Method.GetParameters();
-		return new Dictionary<string, object?>(
-			parameters.Select(argument => new KeyValuePair<string, object?>(
-				argument.Name ?? "",
-				alwaysCompile
-					? CompileAndRun(methodExpression.Arguments[argument.Position])
-					: Evaluate(methodExpression.Arguments[argument.Position])
-				)
-			)
-		);
+		var parameterInfos = methodExpression.Method.GetParameters();
+		if (parameterInfos.Length == 0) {
+			return  new Dictionary<string, object?>();
+		}
+		KeyValuePair<string, object?>[] parameters = new KeyValuePair<string, object?>[parameterInfos.Length];
+		for (int i = 0; i < parameterInfos.Length; i++) {
+			parameters[i] = new KeyValuePair<string, object?>(
+				parameterInfos[i].Name ?? "",
+				Evaluate(methodExpression.Arguments[parameterInfos[i].Position])
+			);
+		}
+		return new Dictionary<string, object?>(parameters);
 	}
 
 	public static object? Evaluate(Expression expression) {
