@@ -69,13 +69,41 @@ internal static class BinaryEvaluator {
 	}
 
 	internal static object? Power(BinaryExpression expression) => ExpressionEvaluator.CompileAndRun(expression);
-	internal static object? Subtract(BinaryExpression expression) => ExpressionEvaluator.CompileAndRun(expression);
+	internal static object? Subtract(BinaryExpression expression) {
+		object? left = ExpressionEvaluator.Evaluate(expression.Left);
+		object? right = ExpressionEvaluator.Evaluate(expression.Right);
+		if (left != null && right != null) {
+			return left switch {
+				double => (double)left - (double)right,
+				long => (long)left - (long)right,
+				ulong => (ulong)left - (ulong)right,
+				int => (int)left - (int)right,
+				uint => (uint)left - (uint)right,
+				short => (short)left - (short)right,
+				ushort => (ushort)left - (ushort)right,
+				sbyte => (sbyte)left - (sbyte)right,
+				byte => (byte)left - (byte)right,
+				nint => (nint)left - (nint)right,
+				nuint => (nuint)left - (nuint)right,
+				_ => ExpressionEvaluator.CompileAndRun(expression),
+			};
+		}
+		return ExpressionEvaluator.CompileAndRun(expression);
+	}
 
 	internal static object? And(BinaryExpression expression) => ExpressionEvaluator.CompileAndRun(expression);
 	internal static object? Or(BinaryExpression expression) => ExpressionEvaluator.CompileAndRun(expression);
 	internal static object? ExclusiveOr(BinaryExpression expression) => ExpressionEvaluator.CompileAndRun(expression);
 
 	internal static object? Coalesce(BinaryExpression expression) => ExpressionEvaluator.CompileAndRun(expression);
+	internal static object? ArrayIndex(BinaryExpression expression) {
+		object? left = ExpressionEvaluator.Evaluate(expression.Left);
+		object? right = ExpressionEvaluator.Evaluate(expression.Right);
+		if (left is Array array && right is int index) {
+			return array.GetValue(index);
+		}
+		return ExpressionEvaluator.CompileAndRun(expression);
+	}
 
 	internal static bool Equal(BinaryExpression expression) {
 		object? left = ExpressionEvaluator.Evaluate(expression.Left);

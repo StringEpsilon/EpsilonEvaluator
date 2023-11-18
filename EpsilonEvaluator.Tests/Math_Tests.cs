@@ -32,4 +32,21 @@ public class Math_Tests {
 		Assert.Equal(result, expectedResult);
 		Assert.Equal(a - b, expectedResult);
 	}
+
+	[Theory]
+	[InlineData(3, 5, 15)]
+	[InlineData(-3, 5, -15)]
+	[InlineData(3L, 5L, 15L)]
+	[InlineData(-3L, 5L, -15L)]
+	[InlineData(1.5, 3.0, 4.5)]
+	public void Multiply(dynamic a, dynamic b, dynamic expectedResult) {
+		var result = ExpressionEvaluator.Evaluate(
+			Expression.Multiply(
+				Expression.Constant(a),
+				Expression.Constant(b)
+			)
+		);
+		Assert.Equal(result, expectedResult);
+		Assert.Equal(a * b, expectedResult);
+	}
 }

@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 namespace EpsilonEvaluator.Tests;
 
 public class Unary_Tests {
+
 	[Theory]
 	[InlineData(true, false)]
 	[InlineData(false, true)]

@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.4.0 (Future):
+
+### Changed (BREAKING)
+- Target .NET 8.0
+
+### Added
+
+Direct evaluation for:
+
+- ArrayIndex
+- Index
+- Subtract
+
 ## 0.3.0 (Current)
 
 ### Added

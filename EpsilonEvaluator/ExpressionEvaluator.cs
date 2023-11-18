@@ -58,6 +58,7 @@ public static class ExpressionEvaluator {
 			ExpressionType.ExclusiveOr => BinaryEvaluator.ExclusiveOr((BinaryExpression)expression),
 
 			ExpressionType.Coalesce => BinaryEvaluator.Coalesce((BinaryExpression)expression),
+			ExpressionType.ArrayIndex => BinaryEvaluator.ArrayIndex((BinaryExpression)expression),
 
 			//Unary expressions:
 			ExpressionType.ArrayLength => UnaryEvaluator.ArrayLength((UnaryExpression)expression),
@@ -74,9 +75,23 @@ public static class ExpressionEvaluator {
 
 			// Other:
 			ExpressionType.Call => EvaluateCall((MethodCallExpression)expression),
+			ExpressionType.Index => EvaluateIndex((IndexExpression)expression),
 			ExpressionType.Lambda => Lambda((LambdaExpression)expression),
 			_ => CompileAndRun(expression),
 		};
+	}
+
+	private static object? EvaluateIndex(IndexExpression expression) {
+		if (expression.Indexer == null || expression.Object == null) {
+			return CompileAndRun(expression);
+		}
+		var item = Evaluate(expression.Object);
+		return expression.Indexer
+			.GetGetMethod()
+			?.Invoke(
+				item,
+				expression.Arguments.Select(y => Evaluate(y)).ToArray()
+			);
 	}
 
 	private static object? Lambda(LambdaExpression expression) {
