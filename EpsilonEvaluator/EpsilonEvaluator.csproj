@@ -12,9 +12,11 @@
 		<RepositoryUrl>https://github.com/StringEpsilon/EpsilonEvaluator</RepositoryUrl>
 		<RespositoryType>git</RespositoryType>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<ChangelogFile>Changelog.md</ChangelogFile>
 	</PropertyGroup>
 	<ItemGroup>
-		<None Include=".\LICENSE.md" Pack="true" PackagePath="/"/>
-		<None Include=".\README.md" Pack="true" PackagePath="/"/>
+		<None Include="..\Changelog.md"  Pack="true" PackagePath="/"/>
+		<None Include="..\LICENSE.md" Pack="true" PackagePath="/"/>
+		<None Include="..\README.md" Pack="true" PackagePath="/"/>
 	</ItemGroup>
 </Project>

@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.4.0 (Future):
+## 0.4.0 (Current):
 
 ### Changed (BREAKING)
 - Target .NET 8.0
@@ -13,7 +13,7 @@ Direct evaluation for:
 - Index
 - Subtract
 
-## 0.3.0 (Current)
+## 0.3.0
 
 ### Added
 
